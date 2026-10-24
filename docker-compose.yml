@@ -40,7 +40,9 @@ services:
 
   api:
     profiles: ["full"]
-    build: ./backend
+    build:
+      context: ./backend
+      target: runtime
     environment:
       APP_ENV: local
       APP_DATABASE_URL: postgresql+asyncpg://app:app@db:5432/app

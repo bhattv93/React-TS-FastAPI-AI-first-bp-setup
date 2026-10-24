@@ -18,10 +18,11 @@ want two codebases or two build pipelines.
 ## Decision
 
 - The app is a plain ASGI FastAPI app run by `uvicorn`, with no AWS-specific code in `app/`.
-- **One Dockerfile** (multi-stage, `uv` based, non-root) builds **one image**, pushed to **ECR** and tagged
-  with the git SHA.
-- **ECS Fargate:** the image runs `uvicorn` behind an ALB.
-- **Lambda:** the *same image* runs as a Lambda container image with the
+- **One Dockerfile** (multi-stage, `uv` based, non-root, base images pinned by digest) with two thin targets,
+  `runtime` and `lambda`. They share every layer except one; both are pushed to **ECR** and tagged with the git
+  SHA.
+- **ECS Fargate:** the `runtime` target runs `uvicorn` behind an ALB. The PR gate builds and scans this target.
+- **Lambda:** the `lambda` target (the same layers) runs as a Lambda container image with the
   [AWS Lambda Web Adapter](https://github.com/awslabs/aws-lambda-web-adapter) layer/extension copied in. It
   forwards Lambda events to uvicorn, behind API Gateway HTTP API or a Function URL.
 - [Mangum](https://mangum.fastapiexpert.com/) (`handler = Mangum(app)`) stays a documented fallback for
