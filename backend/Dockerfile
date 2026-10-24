@@ -22,7 +22,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # ---- runtime: slim, non-root. Used for ECS, local runs and the CI image gate ----
 FROM python:3.13-slim@sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962 AS runtime
-RUN useradd --create-home --uid 10001 app
+RUN useradd --create-home --uid 10001 app \
+    # The app runs from /app/.venv (built by uv). pip is not needed at runtime, and its vendored
+    # libraries (urllib3, msgpack, ...) are scanned and flagged; removing it shrinks the attack surface.
+    && python -m pip uninstall -y pip
 WORKDIR /app
 COPY --from=builder --chown=app:app /app /app
 ENV PATH="/app/.venv/bin:$PATH" \
