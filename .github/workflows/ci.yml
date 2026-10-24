@@ -4,7 +4,8 @@ name: CI
 # path-filtered jobs that are skipped would otherwise leave a required check pending forever.
 on:
   pull_request:
-    branches: [main]
+    # No base-branch filter: stacked pull requests (base = another feature branch) get the same gates.
+    types: [opened, synchronize, reopened]
   push:
     branches: [main]
 
