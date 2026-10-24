@@ -1,0 +1,76 @@
+# ---------------------------------------------------------------------------
+# Local, personal and machine-specific files must never be committed.
+# Anything that depends on who is using the repo or where it is checked out
+# belongs here.
+# ---------------------------------------------------------------------------
+
+# --- AI tooling: personal overrides ---
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+
+# --- Secrets and environment files (keep only the *.example templates) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+
+# --- Editors and IDEs (share only the curated .vscode files below) ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/mcp.json
+.idea/
+*.code-workspace
+*.swp
+
+# --- Operating system noise ---
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.python-version.local
+.pytest_cache/
+.mypy_cache/
+.pylint.d/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.egg-info/
+build/
+dist/
+
+# --- Node / frontend ---
+node_modules/
+.pnpm-store/
+.vite/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
+
+# --- Infrastructure tooling ---
+.terraform/
+*.tfstate
+*.tfstate.*
+infra/**/packaged-*.yaml
+cdk.out/
+
+# --- Logs, scratch and temp ---
+*.log
+tmp/
+.tmp/
+scratch/

@@ -1,0 +1,43 @@
+{
+  "enabledPlugins": {
+    "frontend-design@anthropic-plugin-directory": true,
+    "superpowers@anthropic-plugin-directory": true,
+    "code-review-anthropics@anthropic-plugin-directory": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "skill-creator@anthropic-plugin-directory": true,
+    "code-simplifier@anthropic-plugin-directory": true,
+    "playwright@anthropic-plugin-directory": true,
+    "claude-md-management@anthropic-plugin-directory": true
+  },
+  "enableAllProjectMcpServers": false,
+  "permissions": {
+    "allow": [
+      "Bash(just *)",
+      "Bash(uv run *)",
+      "Bash(uv sync*)",
+      "Bash(pnpm *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(docker compose *)"
+    ],
+    "ask": [
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "WebFetch"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./**/.env)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./secrets/**)",
+      "Bash(git push --force*)",
+      "Bash(aws cloudformation deploy*)",
+      "Bash(aws cloudformation delete-stack*)",
+      "Bash(terraform apply*)",
+      "Bash(terraform destroy*)",
+      "Bash(flyway clean*)"
+    ]
+  }
+}

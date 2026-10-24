@@ -1,0 +1,19 @@
+{
+  "$comment": "Allowlist for AI tooling committed to this repo (ADR-0009). Changing it needs a maintainer-approved PR (see CODEOWNERS). Checked by scripts/check_ai_policy.py in CI.",
+  "approvedTools": ["claude-code", "github-copilot"],
+  "mcpServers": {
+    "approved": ["atlassian"]
+  },
+  "claudePlugins": {
+    "approved": [
+      "frontend-design@anthropic-plugin-directory",
+      "superpowers@anthropic-plugin-directory",
+      "code-review-anthropics@anthropic-plugin-directory",
+      "pyright-lsp@claude-plugins-official",
+      "skill-creator@anthropic-plugin-directory",
+      "code-simplifier@anthropic-plugin-directory",
+      "playwright@anthropic-plugin-directory",
+      "claude-md-management@anthropic-plugin-directory"
+    ]
+  }
+}

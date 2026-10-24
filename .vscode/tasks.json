@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "just: check (all gates)", "type": "shell", "command": "just check", "group": "test" },
+    { "label": "just: dev-backend", "type": "shell", "command": "just dev-backend", "isBackground": true },
+    { "label": "just: dev-frontend", "type": "shell", "command": "just dev-frontend", "isBackground": true },
+    { "label": "just: db-up", "type": "shell", "command": "just db-up" }
+  ]
+}

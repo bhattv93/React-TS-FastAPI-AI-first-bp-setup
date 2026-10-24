@@ -1,0 +1,79 @@
+name: CI
+
+# Every PR runs the same gates as `just check`. Only the final `gate` job is a required status check:
+# path-filtered jobs that are skipped would otherwise leave a required check pending forever.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'justfile'
+              - 'docker-compose.yml'
+              - '.github/workflows/**'
+            frontend:
+              - 'frontend/**'
+              - 'backend/src/**'
+              - 'backend/scripts/**'
+              - 'justfile'
+              - '.github/workflows/**'
+
+  repo:
+    name: Repo hygiene
+    uses: ./.github/workflows/_repo.yml
+
+  security:
+    name: Security
+    uses: ./.github/workflows/_security.yml
+    secrets: inherit
+
+  backend:
+    name: Backend
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    uses: ./.github/workflows/_backend.yml
+
+  frontend:
+    name: Frontend
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    uses: ./.github/workflows/_frontend.yml
+
+  gate:
+    name: gate
+    if: always()
+    needs: [repo, security, backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every executed job to succeed
+        run: |
+          echo '${{ toJSON(needs) }}'
+          if [ '${{ contains(needs.*.result, 'failure') }}' = 'true' ] || [ '${{ contains(needs.*.result, 'cancelled') }}' = 'true' ]; then
+            echo "A required job failed or was cancelled"
+            exit 1
+          fi

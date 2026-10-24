@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.mypy-type-checker",
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    "ms-python.pylint",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "vitest.explorer",
+    "bradlc.vscode-tailwindcss",
+    "anthropic.claude-code",
+    "github.copilot-chat",
+    "ms-azuretools.vscode-containers",
+    "github.vscode-github-actions",
+    "redhat.vscode-yaml",
+    "kddejong.vscode-cfn-lint",
+    "davidanson.vscode-markdownlint",
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker",
+    "bierner.markdown-mermaid"
+  ]
+}

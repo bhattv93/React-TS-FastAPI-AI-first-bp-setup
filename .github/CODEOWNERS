@@ -1,0 +1,20 @@
+# Replace the placeholder teams below with real GitHub teams when you adopt this boilerplate.
+# The last matching pattern wins.
+
+*                                   @org/maintainers
+
+/backend/                           @org/backend
+/frontend/                          @org/frontend
+/backend/db/migrations/             @org/backend @org/maintainers
+
+# Infrastructure, pipelines and AI configuration need maintainer review.
+/infra/                             @org/devops @org/maintainers
+/.github/                           @org/devops @org/maintainers
+/CLAUDE.md                          @org/maintainers
+/**/CLAUDE.md                       @org/maintainers
+/.claude/                           @org/maintainers
+/.mcp.json                          @org/maintainers
+/.vscode/mcp.json                   @org/maintainers
+/scripts/check_ai_policy.py         @org/maintainers
+
+/docs/adr/                          @org/maintainers

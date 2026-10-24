@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a bug or request a feature in Jira
+    url: https://your-company.atlassian.net/jira/software/projects/AIFS/boards
+    about: Jira is the single intake for work items. Replace this URL with your Jira project when you adopt this boilerplate.

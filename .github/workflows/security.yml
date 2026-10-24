@@ -1,0 +1,16 @@
+name: Security (scheduled)
+
+# New CVEs are published daily, so unchanged code needs re-scanning. Every Monday 06:00 UTC.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Weekly dependency and vulnerability scan
+    uses: ./.github/workflows/_security.yml
+    secrets: inherit

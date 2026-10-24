@@ -1,0 +1,54 @@
+{
+  // Everything here is relative to the workspace, so it works on any machine and OS.
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.formatOnSave": true,
+  "editor.rulers": [88, 100],
+
+  // ---- Python (backend) ----
+  // Select the interpreter once: Command Palette > "Python: Select Interpreter" > backend/.venv
+  "python.venvPath": "${workspaceFolder}/backend",
+  "python.analysis.extraPaths": ["${workspaceFolder}/backend/src"],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.cwd": "${workspaceFolder}/backend",
+  "python.testing.pytestArgs": ["tests", "--no-cov"],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
+  },
+  "black-formatter.args": ["--config", "${workspaceFolder}/backend/pyproject.toml"],
+  "isort.args": ["--settings-path", "${workspaceFolder}/backend/pyproject.toml"],
+  "pylint.args": ["--rcfile", "${workspaceFolder}/backend/pyproject.toml"],
+  "mypy-type-checker.args": ["--config-file", "${workspaceFolder}/backend/pyproject.toml"],
+  "mypy-type-checker.cwd": "${workspaceFolder}/backend",
+
+  // ---- TypeScript / React (frontend) ----
+  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "eslint.workingDirectories": [{ "directory": "frontend", "changeProcessCWD": true }],
+  "vitest.rootConfig": "frontend/vitest.config.ts",
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "tailwindCSS.experimental.classRegex": [["className=\"([^\"]*)\"", "([^\"]*)"]],
+
+  // ---- Keep search fast ----
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "frontend/src/api/schema.d.ts": true
+  },
+  "files.exclude": { "**/__pycache__": true, "**/.mypy_cache": true, "**/.pytest_cache": true },
+
+  // ---- AI tooling parity: Copilot reads the Claude-native files (docs/03-ai-first/tool-parity.md) ----
+  "chat.useClaudeMdFile": true,
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.includeApplyingInstructions": true,
+  "chat.useCustomizationsInParentRepositories": true
+}
