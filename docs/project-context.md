@@ -1,0 +1,50 @@
+I want to create a setup for a project that uses React with TypeScript on the frontend and FastAPI on the backend, with a focus on AI-first development. The goal is to have a well-structured project that allows for easy development on any project that is built on the react TS and python FastAPI. To create a setup for a project that uses React with TypeScript on the frontend and FastAPI on the backend, with a focus on AI-first development, this is what I have in mind:
+
+Project structure:
+Top level folders: 
+backend
+    src
+        app
+            main.py
+        models
+                models.py
+        api            
+            routes.py
+            router
+                <individual router files>.py
+        services
+            <individual service files>.py
+        utils
+            <individual utility files>.py
+        helpers
+            <individual helper files>.py
+        schemas
+            <individual schema files>.py
+        tests
+            fixtures
+            test_main.py
+            test_routes.py
+frontend
+    src
+        components
+            <individual component files>.tsx
+        pages
+            <individual page files>.tsx
+        services
+            <individual service files>.ts
+        utils
+            <individual utility files>.ts
+        hooks
+            <individual hook files>.ts
+        tests
+            <individual test files>.ts
+
+I want this to be an AI-first enablement project boilerplate repo that can be used by any developer who is working with this tech stack and has a focus on AI-first development. The backend will be built using FastAPI, which is a modern, fast (high-performance), web framework for building APIs with Python 3.12+ based on standard Python type hints. For type-hinting/type-enforcement/validation we will be using Pydantic v2. We will have ORMs on this project. The frontend will be built using React with TypeScript, which provides a strong typing system and helps catch errors early in the development process.
+
+I want to use this setup for the skills that we generate to simplify the build and also accelerate it. This should follow best practices for both frontend and backend development, ensuring that the project is maintainable, scalable, and easy to understand for any developer who joins the project. The quality gates should also be there such as for backend the following adherences should be there: pylint for linting, black for code formatting, isort for imports, mypy for static typign, docstring should be numpy style, and for frontend we should have eslint for linting, prettier for code formatting, and vitest for testing. For the backend, we will also include a testing framework using pytest to ensure that our API endpoints and services are functioning correctly. For the frontend, we will use vitest along with React Testing Library to test our components and pages.
+
+Every PR raised for the codebase should be tested with these quality gates, there should be gGHA workflow for the same. The project should also include a README file that provides an overview of the project, its structure, and instructions for setting up the development environment. Additionally, we will include a CONTRIBUTING.md file that outlines the guidelines for contributing to the project, including code style, testing requirements, and PR submission process. There should be a codeowners file to define the maintainers of the project and their responsibilities. The project should also include a LICENSE file to specify the terms under which the code can be used and distributed. I also want to have this project equally usable buy anyone who is working on wither claude code or github copilot, so there should be instructions for the same under .github/copilot-instructions.md file. tHE BASE;INE SETUP JUST LIKE ANY gold STANDARD SETUP SHOULD BE THERE, AND THEN WE CAN HAVE A FOLDER FOR AI-FIRST ENABLEMENT, WHERE WE CAN HAVE EXAMPLES OF HOW TO USE AI IN THE PROJECT, SUCH AS USING AI FOR CODE GENERATION, TESTING, AND OTHER TASKS. This will help developers understand how to leverage AI in their development process and improve their productivity. We should consider the scale for the project and be a little more focussed towards considering that the teams are going to use claude code as their primary tool while also leveraging github copilot. Let's also consider that the project team would nbe using VS code as an IDE, so the baseline extensions and the standard settings for the same have to be there. The project should also include a .vscode folder with recommended extensions and settings for the project, such as Python, Pylance, ESLint, Prettier, and any other relevant extensions. This will help ensure that all developers working on the project have a consistent development environment and can easily set up their IDE for the project. We should also consider including the ways in which the code would be deployed e.g. the backend code could be there in local or deployed to any cloud based provider let's say AWS so how would this work in both aws lambda as well as the ECS service(where ECR image deployment for docker image of the codebase etc would also come into picture) for that matter and also similarly for frontend such as the static website hosting on AWS S3 or any other cloud provider. We should also consider including a CI/CD pipeline for the project, which would automate the build, test, and deployment process for both the frontend and backend. This would help ensure that the code is always in a deployable state and reduce the risk of introducing bugs or errors into production. The CI/CD pipeline could be implemented using GitHub Actions or any other relevant tool, and should include steps for building, testing, and deploying the code to the appropriate environment. Additionally, we should consider including monitoring and logging for the project, which would help developers identify and troubleshoot issues in production. Overall, the goal of this project setup is to provide a well-structured and maintainable codebase that allows developers to easily build AI-first applications using React with TypeScript on the frontend and FastAPI on the backend. Consider AWS as the core cloud platform in which the project would be deployed, and ensure that the setup is optimized for AI-first development, with a focus on leveraging AI tools and techniques to improve productivity and efficiency.
+
+let's also consider that the project management for this would be done using JIRA and there would be suer stories created on top of the project setup, and the project would be managed using agile methodologies. The project should also include a clear roadmap and milestones for the development process, which would help ensure that the project stays on track and meets its goals. Additionally, we should consider including documentation for the project, which would provide developers with a clear understanding of the project's architecture, design patterns, and best practices. This documentation could be included in the README file or in a separate documentation folder within the project structure. Overall, the goal of this project setup is to provide a comprehensive and well-structured codebase that allows developers to easily build AI-first applications using React with TypeScript on the frontend and FastAPI on the backend, while also ensuring that the project is maintainable, scalable, and easy to understand for any developer who joins the project. So JIRA connectivity would also play a vital role where the JIRA would act as a primary provider of the requirements and the acceptance criteria and act as a spec driven development for the team. Since this project would AI first enablement and the team would be heavily relying on the AI to write the codebase we need to have the test coverage above 80% for the codebase so that the AI can generate the code and the tests for the same and the team can focus on the business logic and the requirements. The project should also include a clear process for code reviews and approvals, which would help ensure that the code meets the project's quality standards and adheres to best practices. Additionally, we should consider including a process for handling bugs and issues, which would help ensure that any issues are addressed in a timely manner and do not impact the project's development timeline. Overall, the goal of this project setup is to provide a comprehensive and well-structured codebase that allows developers to easily build AI-first applications using React with TypeScript on the frontend and FastAPI on the backend, while also ensuring that the project is maintainable, scalable, and easy to understand for any developer who joins the project.Don't just use JIRA as a project management tool, use it highly for spec driven development. 
+
+This project should also call out the scale of the project and the methodology that we are using for claude etc. for example the monorepo would follow somewhat different than usual to efficient manage the context of the project as well as the overakll chat context when the sessions areb sp[un up by the team. maybe havign a CLAUDE.md in the folder leevl as well, for example this project would be somewhat limited right now in terms of the scale of the project, but we should consider how to scale it up in the future. The project should also include a clear process for managing dependencies and versioning, which would help ensure that the project remains stable and maintainable over time. Additionally, we should consider including a process for managing configuration and environment variables, which would help ensure that the project can be easily deployed to different environments without introducing errors or inconsistencies. Overall, the goal of this project setup is to provide a comprehensive and well-structured codebase that allows developers to easily build AI-first applications using React with TypeScript on the frontend and FastAPI on the backend, while also ensuring that the project is maintainable, scalable, and easy to understand for any developer who joins the project.]
