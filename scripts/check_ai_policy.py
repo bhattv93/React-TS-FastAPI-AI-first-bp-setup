@@ -68,9 +68,16 @@ def check(root: Path) -> list[str]:
         for name in sorted(enabled - approved_plugins)
     ]
     if settings.get("enableAllProjectMcpServers") is True:
-        problems.append(".claude/settings.json: enableAllProjectMcpServers must not be true")
-    if settings.get("permissions", {}).get("defaultMode") in {"bypassPermissions", "auto"}:
-        problems.append(".claude/settings.json: defaultMode must not bypass permission prompts")
+        problems.append(
+            ".claude/settings.json: enableAllProjectMcpServers must not be true"
+        )
+    if settings.get("permissions", {}).get("defaultMode") in {
+        "bypassPermissions",
+        "auto",
+    }:
+        problems.append(
+            ".claude/settings.json: defaultMode must not bypass permission prompts"
+        )
     return problems
 
 

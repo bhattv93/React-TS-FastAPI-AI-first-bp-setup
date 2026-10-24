@@ -10,6 +10,8 @@
     "**/node_modules/**",
     "**/.venv/**",
     "docs/project-context.md",
+    ".claude/agents/**",
+    ".claude/loop.md",
     "frontend/coverage/**"
   ]
 }

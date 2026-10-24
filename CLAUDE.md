@@ -57,6 +57,13 @@ Use `uv run ...` for Python and `pnpm ...` for Node. Never call bare `pip` or `n
   material into prompts, fixtures, logs or screenshots. Do not add MCP servers, plugins or other AI tools;
   ask a maintainer. Ask before any outbound network call to a host the task does not name.
 
+## Working economically (details: `docs/03-ai-first/cost-and-context-optimization.md`)
+
+- Pick the model and effort once at session start; switching mid-task discards the prompt cache.
+- Run `/clear` between stories. Delegate noisy test or lint runs to the `test-triage` subagent.
+- Use `/goal` only with a turn cap. Agent teams and workflows need maintainer approval; `ultracode` stays off.
+- Subagents: `code-reviewer`, `spec-verifier`, `test-triage`. Skills are listed by `/` autocomplete.
+
 ## Where to read more (open on demand; do not import into context)
 
 - Architecture: `docs/02-architecture/`

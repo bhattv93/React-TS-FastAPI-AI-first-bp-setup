@@ -4,12 +4,13 @@ Shared Claude Code configuration for this repository. GitHub Copilot in VS Code 
 
 | Path | Purpose | Status |
 |------|---------|--------|
-| `settings.json` | Enabled plugins and permission rules shared by the team | Present |
+| `settings.json` | Default model, enabled plugins, permissions and hooks shared by the team | Present |
 | `settings.local.json` | Your personal overrides | Gitignored; never commit |
-| `rules/` | Path-scoped conventions | Planned (milestone M4) |
-| `skills/` | Reusable workflows | Planned (milestone M4) |
-| `agents/` | Specialist subagents | Planned (milestone M4) |
-| `hooks/` | Deterministic guards (protected files, formatting) | Planned (milestone M4) |
+| `rules/` | Path-scoped conventions that load only when matching files are touched | Present |
+| `skills/` | Reusable workflows: spec, implement, endpoint, migration, page, PR-ready | Present (more planned) |
+| `agents/` | Model-routed subagents: code-reviewer, spec-verifier, test-triage | Present |
+| `hooks/` | Deterministic guards: protected files, formatting, story context | Present |
+| `loop.md` | Default prompt for `/loop` (babysit the current PR) | Present |
 
-Rules for what goes where and how big each file may be: `docs/03-ai-first/md-governance.md`.
-The repository-wide instructions are in `CLAUDE.md` at the repository root.
+Why these exist and how big each may be: `docs/03-ai-first/md-governance.md`. The budgets are enforced by
+`just check-ai-config`. The repository-wide instructions are in `CLAUDE.md` at the repository root.

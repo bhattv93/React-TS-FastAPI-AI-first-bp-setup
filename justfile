@@ -59,7 +59,11 @@ dev: db-up
 # ---------------------------------------------------------------- quality gates
 
 # Everything CI runs. Run this before opening a PR.
-check: check-backend check-frontend api-check check-ai-policy
+check: check-backend check-frontend api-check check-ai-policy check-ai-config
+
+# Fail if AI instruction files break their context budgets (sizes, scoped rules, pinned subagent models).
+check-ai-config:
+    uv run --project backend python scripts/check_ai_config.py
 
 # Dependency health: lockfiles current, packages compatible, peers resolve, no known vulnerabilities.
 # Needs network access (vulnerability databases), so it is not part of `check`; CI runs it on every PR and weekly.

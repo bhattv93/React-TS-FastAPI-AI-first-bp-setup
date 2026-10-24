@@ -123,9 +123,21 @@ def build_checks(target: str) -> list[Check]:
     checks: list[Check] = []
     if target in {"backend", "all"}:
         checks += [
-            _command_check("backend: lockfile matches pyproject.toml", ["uv", "lock", "--check"], backend),
-            _command_check("backend: installed packages are compatible", ["uv", "pip", "check"], backend),
-            _command_check("backend: pip-audit (known vulnerabilities)", ["uv", "run", "pip-audit"], backend),
+            _command_check(
+                "backend: lockfile matches pyproject.toml",
+                ["uv", "lock", "--check"],
+                backend,
+            ),
+            _command_check(
+                "backend: installed packages are compatible",
+                ["uv", "pip", "check"],
+                backend,
+            ),
+            _command_check(
+                "backend: pip-audit (known vulnerabilities)",
+                ["uv", "run", "pip-audit"],
+                backend,
+            ),
         ]
     if target in {"frontend", "all"}:
         checks += [
@@ -134,7 +146,10 @@ def build_checks(target: str) -> list[Check]:
                 ["pnpm", "audit", "--audit-level=high"],
                 frontend,
             ),
-            Check("frontend: peer dependencies resolve from scratch", _fresh_peer_resolution),
+            Check(
+                "frontend: peer dependencies resolve from scratch",
+                _fresh_peer_resolution,
+            ),
         ]
     return checks
 
