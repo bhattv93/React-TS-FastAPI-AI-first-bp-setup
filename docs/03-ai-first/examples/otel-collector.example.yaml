@@ -1,0 +1,28 @@
+# EXAMPLE ONLY - validate against the current AWS Distro for OpenTelemetry (ADOT) documentation before use.
+# Receives OTLP from Claude Code and writes CloudWatch metrics (EMF) so dashboards can group by team.id.
+# See docs/03-ai-first/usage-telemetry-and-chargeback.md
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+processors:
+  batch:
+    timeout: 30s
+
+exporters:
+  awsemf:
+    region: eu-west-1 # replace with your region
+    namespace: ClaudeCode
+    log_group_name: /claude-code/metrics
+    dimension_rollup_option: NoDimensionRollup
+    resource_to_telemetry_conversion:
+      enabled: true # turns team.id, cost_center, vcs.* resource attributes into dimensions
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awsemf]

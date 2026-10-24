@@ -8,6 +8,8 @@ last-reviewed: 2026-10-24
 
 ## Subagents (`.claude/agents/*.md`)
 
+> **Built:** `code-reviewer` (Sonnet), `spec-verifier` (Haiku), `test-triage` (Haiku). The other rows are planned. Every agent pins a model; the lint enforces it. See [agents-and-supervision.md](agents-and-supervision.md).
+
 Subagents run in their own context window. Use them for specialist work whose intermediate output shouldn't
 pollute the main session. VS Code Copilot also reads this folder (Claude agent format).
 
@@ -25,6 +27,8 @@ Rules:
 - Don't duplicate the built-in Explore and Plan agents.
 
 ## Hooks (`.claude/settings.json`) are the enforcement layer
+
+> **Built:** `guard_protected_files.py` (PreToolUse), `format_changed_file.py` (PostToolUse), `session_context.py` (SessionStart), all covered by unit tests and run with `uv run --no-project python`. The other rows are planned.
 
 Instruction files are advisory. Hooks are deterministic. Hook scripts live in `.claude/hooks/` as Python run
 through `uv run --no-project python …`, so they work on Windows and Unix. They receive the tool call as JSON

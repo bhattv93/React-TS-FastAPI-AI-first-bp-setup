@@ -44,6 +44,8 @@ or a CI gate. Instruction files are advisory; hooks and CI are enforced.
 
 ## Planned files
 
+> **Built:** the three `CLAUDE.md` files, the `backend/`, `frontend/` and `ci/` rule files listed in `.claude/rules/` (named by topic, for example `python-style.md`), three subagents, six skills, three hooks. The tree below is the original plan; `infra/` files wait for milestone M5.
+
 ```text
 CLAUDE.md                                   # ≤150 lines
 backend/CLAUDE.md  frontend/CLAUDE.md  infra/CLAUDE.md
