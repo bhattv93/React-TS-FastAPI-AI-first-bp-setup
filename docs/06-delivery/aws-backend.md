@@ -14,11 +14,12 @@ Multi-stage:
 
 1. **builder:** `python:3.13-slim` + uv (copied from `ghcr.io/astral-sh/uv`), then
    `uv sync --locked --no-dev --no-install-project`, then copy `src/`, then `uv sync --locked --no-dev`.
-2. **runtime:** `python:3.13-slim` pinned by digest. Copy `.venv` and `src/`, run as a non-root user,
+2. **runtime** (target `runtime`: ECS, local, CI gate): `python:3.13-slim` pinned by digest. Copy `.venv` and `src/`, run as a non-root user,
    `ENV PATH=/app/.venv/bin:$PATH`.
-3. Copy the **AWS Lambda Web Adapter** extension into `/opt/extensions/` and set `ENV PORT=8000`,
-   `AWS_LWA_READINESS_CHECK_PATH=/health`. The extension is inert outside Lambda, so the same image works on
-   ECS.
+3. **lambda** (target `lambda`): `FROM runtime`, plus one layer that copies the **AWS Lambda Web Adapter** extension
+   into `/opt/extensions/` and sets `AWS_LWA_READINESS_CHECK_PATH=/health`. All other layers are shared with `runtime`.
+   The adapter comes from public ECR, which rate-limits anonymous pulls on shared CI runners, so this target is
+   built in the deploy pipeline (with retries) and not in the PR gate. Every base image is pinned by digest.
 4. `CMD ["uvicorn", "--factory", "app.main:create_app", "--host", "0.0.0.0", "--port", "8000"]`. The factory
    form means importing the module never reads the environment.
 
