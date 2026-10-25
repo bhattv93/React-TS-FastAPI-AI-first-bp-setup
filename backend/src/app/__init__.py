@@ -1,0 +1,1 @@
+"""AI-first FastAPI backend."""

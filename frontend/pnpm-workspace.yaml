@@ -1,0 +1,2 @@
+﻿# Fail installs on unmet peer dependencies so the frontend toolchain stays harmonious.
+strictPeerDependencies: true

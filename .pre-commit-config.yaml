@@ -1,0 +1,54 @@
+# Installed by `just setup` (or `just hooks`). Runs on `git commit`; CI runs the same gates via `just check`.
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+        exclude: '(^frontend/src/api/|pnpm-lock\.yaml|uv\.lock|^docs/project-context\.md$)'
+      - id: check-yaml
+        args: [--allow-multiple-documents] # pnpm-lock.yaml is multi-document
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [feat, fix, refactor, test, docs, chore, ci, build, perf]
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.24.0
+    hooks:
+      - id: markdownlint-cli2
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+    hooks:
+      - id: gitleaks
+
+  # Project gates run through `just` so local, pre-commit and CI use identical commands.
+  - repo: local
+    hooks:
+      - id: backend-gates
+        name: backend (black, isort, pylint, mypy)
+        entry: just lint-backend
+        language: system
+        files: ^backend/
+        pass_filenames: false
+      - id: frontend-gates
+        name: frontend (prettier, eslint, tsc)
+        entry: just lint-frontend
+        language: system
+        files: ^frontend/
+        pass_filenames: false
+      - id: ai-policy
+        name: AI policy (MCP servers, plugins)
+        entry: just check-ai-policy
+        language: system
+        files: ^(\.mcp\.json|\.vscode/mcp\.json|\.claude/settings\.json|\.github/ai-policy\.json)$
+        pass_filenames: false

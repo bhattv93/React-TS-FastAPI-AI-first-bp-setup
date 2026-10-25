@@ -1,0 +1,58 @@
+# Local development stack. Run from the repository root:
+#   docker compose up -d db flyway     # database + migrations (what `just db-up` does)
+#   docker compose --profile full up   # also run the API container
+name: ai-first
+
+services:
+  db:
+    image: postgres:16-alpine@sha256:f4610795587492cd4fb887c2dc3de301b813278bb6f616992061141b5f15ac36
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    # Published on 127.0.0.1:5433 (not 5432): developer machines often already run a local PostgreSQL
+    # on 5432, and binding to loopback keeps the database off the network.
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Applies backend/db/migrations then exits. Same image and SQL files CI and AWS use.
+  flyway:
+    image: flyway/flyway:11@sha256:782c5c207ffb5ac6336139fda4f4295bd9991ef63ad36919406d4268740069bb
+    command: -connectRetries=10 migrate
+    environment:
+      FLYWAY_URL: jdbc:postgresql://db:5432/app
+      FLYWAY_USER: app
+      FLYWAY_PASSWORD: app
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_VALIDATE_MIGRATION_NAMING: "true"
+    volumes:
+      - ./backend/db/migrations:/flyway/sql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    profiles: ["full"]
+    build:
+      context: ./backend
+      target: runtime
+    environment:
+      APP_ENV: local
+      APP_DATABASE_URL: postgresql+asyncpg://app:app@db:5432/app
+      APP_SECRET_KEY: change-me-locally
+      APP_CORS_ORIGINS: '["http://localhost:5173"]'
+    ports:
+      - "8000:8000"
+    depends_on:
+      flyway:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:

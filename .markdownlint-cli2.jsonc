@@ -1,0 +1,15 @@
+{
+  // Line length is not enforced (tables and links are long); everything else is the default rule set.
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD060": false
+  },
+  "globs": ["**/*.md"],
+  "ignores": [
+    "**/node_modules/**",
+    "**/.venv/**",
+    "docs/project-context.md",
+    "frontend/coverage/**"
+  ]
+}
