@@ -47,8 +47,10 @@ Dependency direction: `pages → components / hooks → services → api`. Enfor
   combinations become components, not `@apply` sprawl.
 - Env vars: only `VITE_*` are exposed to the bundle. **Never put secrets in the frontend.** See
   [config-and-secrets.md](../07-engineering-process/config-and-secrets.md).
-- Errors: one `ErrorBoundary` at the app root, and `getErrorMessage()` in `src/utils/errors.ts` turns any error
-  (including `ApiError` with its request ID) into a user-facing message.
+- Errors: one `ErrorBoundary` at the app root that clears itself when the route changes, and
+  `getErrorMessage()` in `src/utils/errors.ts`. Only errors that extend `UserFacingError` (`ApiError` with its
+  request ID, `ConfigError`) show their own message; anything else (network failures, bugs) shows a generic
+  text, because raw messages can expose internals. The details go to the console and the backend logs.
 
 ## Testing strategy
 

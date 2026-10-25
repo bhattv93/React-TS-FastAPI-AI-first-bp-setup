@@ -1,5 +1,7 @@
+import { UserFacingError } from '../utils/errors';
+
 /** Error raised for non-2xx API responses, built from the backend error envelope. */
-export class ApiError extends Error {
+export class ApiError extends UserFacingError {
   override name = 'ApiError';
 
   constructor(
