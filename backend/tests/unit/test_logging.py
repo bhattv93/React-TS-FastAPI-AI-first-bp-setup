@@ -52,3 +52,19 @@ def test_json_logs_render_exception_tracebacks(
     payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
     assert "Traceback" in payload["exception"]
     assert "ValueError: kaboom" in payload["exception"]
+
+
+def test_redaction_reaches_nested_values_and_key_variants() -> None:
+    event = {
+        "event": "call",
+        "payload": {"user": {"Password": "x"}, "items": [{"api_key": "y"}]},
+        "headers": {"Set-Cookie": "sid=1", "X-Request-ID": "keep"},
+        "access_token": "z",
+    }
+    result = redact_sensitive(None, "info", event)
+    assert result["payload"]["user"]["Password"] == "***"
+    assert result["payload"]["items"][0]["api_key"] == "***"
+    assert result["headers"]["Set-Cookie"] == "***"
+    assert result["headers"]["X-Request-ID"] == "keep"
+    assert result["access_token"] == "***"
+    assert result["event"] == "call"

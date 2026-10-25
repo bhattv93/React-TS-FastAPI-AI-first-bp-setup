@@ -32,6 +32,15 @@ def main(argv: list[str]) -> int:
         return 2
     version = datetime.now(UTC).strftime("%Y%m%d%H%M")
     path = MIGRATIONS_DIR / f"V{version}__{argv[1]}.sql"
+    taken = sorted(MIGRATIONS_DIR.glob(f"V{version}__*.sql"))
+    if taken:
+        # Flyway rejects two migrations that share a version, whatever their descriptions.
+        print(
+            f"a migration with version V{version} already exists ({taken[0].name}); "
+            "wait a minute and retry",
+            file=sys.stderr,
+        )
+        return 1
     try:
         # Mode "x" fails instead of truncating a migration that already exists.
         with path.open("x", encoding="utf-8", newline="\n") as handle:

@@ -146,12 +146,17 @@ def register_exception_handlers(app: FastAPI) -> None:
         JSONResponse
             A 422 response listing the invalid fields.
         """
-        # ``errors()`` can hold exception objects (``ctx.error``) JSON cannot encode.
+        # ``input`` echoes the submitted value (possibly a password), so it is dropped;
+        # ``ctx`` can hold exception objects that JSON cannot encode, hence the encoder.
+        details = [
+            {key: value for key, value in error.items() if key != "input"}
+            for error in exc.errors()
+        ]
         return error_response(
             422,
             "request_validation_error",
             "Request validation failed",
-            jsonable_encoder(exc.errors()),
+            jsonable_encoder(details),
         )
 
     @app.exception_handler(StarletteHTTPException)

@@ -40,3 +40,12 @@ def test_refuses_to_overwrite_an_existing_migration(
 
 def test_rejects_an_invalid_name(script: ModuleType) -> None:
     assert script.main(["new_migration", "Bad Name"]) == 2
+
+
+def test_refuses_a_second_migration_with_the_same_version(
+    script: ModuleType, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert script.main(["new_migration", "add_items"]) == 0
+    assert script.main(["new_migration", "add_index"]) == 1
+    assert len(list(script.MIGRATIONS_DIR.glob("V*.sql"))) == 1
+    assert "version" in capsys.readouterr().err

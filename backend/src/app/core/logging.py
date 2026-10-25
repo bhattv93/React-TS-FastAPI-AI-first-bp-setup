@@ -7,15 +7,66 @@ from typing import Any
 import structlog
 from structlog.typing import EventDict, WrappedLogger
 
-REDACTED_KEYS = frozenset(
-    {"password", "token", "authorization", "email", "secret", "secret_key"}
+MASK = "***"
+# A key is sensitive when its lower-cased name (dashes as underscores) holds one of
+# these fragments.
+REDACTED_KEY_PARTS = (
+    "password",
+    "passwd",
+    "secret",
+    "token",
+    "authorization",
+    "cookie",
+    "api_key",
+    "apikey",
+    "email",
 )
+
+
+def _is_sensitive(key: object) -> bool:
+    """Return whether a mapping key names a sensitive value.
+
+    Parameters
+    ----------
+    key : object
+        The mapping key.
+
+    Returns
+    -------
+    bool
+        ``True`` when the key contains one of ``REDACTED_KEY_PARTS``.
+    """
+    name = str(key).lower().replace("-", "_")
+    return any(part in name for part in REDACTED_KEY_PARTS)
+
+
+def _redact(value: Any) -> Any:
+    """Return a copy of ``value`` with sensitive mapping values masked.
+
+    Parameters
+    ----------
+    value : Any
+        A logged value; mappings and lists are searched, anything else is kept.
+
+    Returns
+    -------
+    Any
+        The redacted copy.
+    """
+    if isinstance(value, dict):
+        return {
+            key: MASK if _is_sensitive(key) else _redact(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_redact(item) for item in value]
+    return value
 
 
 def redact_sensitive(
     _logger: WrappedLogger, _method: str, event_dict: EventDict
 ) -> EventDict:
-    """Mask the value of any known sensitive key.
+    """Mask the value of any sensitive key, at any depth.
 
     The first two arguments are required by the structlog processor API and are
     unused.
@@ -30,10 +81,8 @@ def redact_sensitive(
     EventDict
         The event with sensitive values replaced by ``"***"``.
     """
-    for key in event_dict:
-        if key.lower() in REDACTED_KEYS:
-            event_dict[key] = "***"
-    return event_dict
+    redacted: EventDict = _redact(event_dict)
+    return redacted
 
 
 def configure_logging(level: str = "INFO", *, json_logs: bool = True) -> None:

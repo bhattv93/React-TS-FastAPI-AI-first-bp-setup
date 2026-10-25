@@ -49,6 +49,7 @@ def _stdin(monkeypatch: pytest.MonkeyPatch, payload: dict[str, object]) -> None:
         (".env.local", False, True),
         ("backend/.env.example", False, False),
         ("frontend/src/api/schema.d.ts", False, True),
+        ("frontend/src/api/openapi.json", False, True),
         ("backend/uv.lock", False, True),
         ("frontend/pnpm-lock.yaml", False, True),
         ("backend/db/migrations/V202610240001__create_app_meta.sql", True, True),
