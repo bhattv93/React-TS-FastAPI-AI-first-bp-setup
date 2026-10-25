@@ -24,8 +24,10 @@ added, and what data may never reach an AI service.
    work on this repository.
 3. **MCP servers:**
    - The repo-committed set is an **allowlist** (currently `atlassian` only) in `.github/ai-policy.json`.
-     Adding one needs a maintainer-approved PR, and CI fails if `.mcp.json` or `.vscode/mcp.json` list a server
-     that is not on it.
+     Adding one needs a maintainer-approved PR, and CI fails if `.mcp.json`, `.vscode/mcp.json` or the
+     `mcpServers` of `.claude/settings.json` list a server that is not on it. Each approved server is also
+     pinned to its URL (`mcpServers.urls`), so an approved name cannot be pointed at another host or at a
+     local command.
    - Developers may add **personal** servers in their own user configuration for non-repository tasks. No
      personal server may receive repository code, specs, logs or secrets unless the maintainers approved it.
 4. **Plugins** enabled in `.claude/settings.json` are an allowlist in the same file, with the same PR rule.

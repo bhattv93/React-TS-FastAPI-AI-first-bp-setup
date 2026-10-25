@@ -39,7 +39,7 @@ mistakes but do not stop a determined person. Only the organisation-managed laye
 
 | Control | Where | Enforced by | Can a developer bypass it? |
 |---------|-------|-------------|----------------------------|
-| MCP servers match the allowlist | `.mcp.json`, `.vscode/mcp.json`, `.github/ai-policy.json` | `scripts/check_ai_policy.py` in pre-commit, `just check` and CI | Not in a merged PR (CI fails); locally yes |
+| MCP servers match the allowlist and their pinned URL | `.mcp.json`, `.vscode/mcp.json`, `.claude/settings.json`, `.github/ai-policy.json` | `scripts/check_ai_policy.py` in pre-commit, `just check` and CI | Not in a merged PR (CI fails); locally yes |
 | Plugins match the allowlist | `.claude/settings.json` | Same check | Same |
 | Project MCP servers need explicit approval | `enableAllProjectMcpServers: false` in `.claude/settings.json`; Claude Code prompts per user | Claude Code | A user can approve in their own session |
 | Secret files unreadable by the agent | `permissions.deny` for `.env`, `*.pem`, `*.key`, `secrets/` | Claude Code | A user can relax it in local settings |

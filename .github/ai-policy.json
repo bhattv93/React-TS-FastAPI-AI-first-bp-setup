@@ -2,7 +2,10 @@
   "$comment": "Allowlist for AI tooling committed to this repo (ADR-0009). Changing it needs a maintainer-approved PR (see CODEOWNERS). Checked by scripts/check_ai_policy.py in CI.",
   "approvedTools": ["claude-code", "github-copilot"],
   "mcpServers": {
-    "approved": ["atlassian"]
+    "approved": ["atlassian"],
+    "urls": {
+      "atlassian": "https://mcp.atlassian.com/v1/mcp"
+    }
   },
   "claudePlugins": {
     "approved": [
