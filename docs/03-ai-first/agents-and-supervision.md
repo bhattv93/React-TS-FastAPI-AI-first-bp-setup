@@ -102,7 +102,7 @@ Rules:
 | Spec approval | Human (story owner or tech lead) | Misunderstood requirements, before any code |
 | Plan mode / plan review | Human, for changes over about three files | Wrong approach |
 | Independent judge | `/goal` evaluator, advisor | Premature "done", missed hard cases |
-| Deterministic guards | Hooks (protected files), permission deny rules | Known-bad actions, always |
+| Deterministic guards | Hooks (protected files) on the agent's edit tools, permission deny rules, and the CI backstops below | Known-bad actions the agent usually produces; not a security boundary |
 | Review agents | `code-reviewer`, `spec-verifier` | Layering, test quality, AC gaps |
 | Gates | `just check`, CI `gate`, security scans | Regressions, vulnerabilities, coverage |
 | **Human merge** | CODEOWNER approval | Everything AI cannot judge. Never delegated or automated |

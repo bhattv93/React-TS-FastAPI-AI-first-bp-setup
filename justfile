@@ -29,7 +29,8 @@ hooks:
 
 # Start the database and apply migrations (Docker required).
 db-up:
-    docker compose up -d db flyway
+    docker compose up -d --wait db
+    docker compose run --rm flyway
 
 db-down:
     docker compose down

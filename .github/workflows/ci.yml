@@ -35,6 +35,9 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'scripts/**'
+              - '.claude/**'
+              - '.github/ai-policy.json'
               - 'justfile'
               - 'docker-compose.yml'
               - '.github/workflows/**'

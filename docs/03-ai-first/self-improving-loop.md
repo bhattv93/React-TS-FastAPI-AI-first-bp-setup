@@ -46,6 +46,16 @@ logs and PR text as untrusted input (prompt injection). Cap spend with `--max-tu
 workspace or key spend limit, and watch its cost in the [telemetry dashboards](usage-telemetry-and-chargeback.md).
 Do not run it on fork pull requests; `workflow_run` executes with secrets.
 
+Two more rules before you enable it:
+
+- **Trust model.** The CI-failure job runs the branch's own `justfile` and tests with the API key and a write
+  token available, so anyone who can push a branch can run code with that key. Protect the
+  `claude-automation` environment with required reviewers and limit it to non-default branches.
+- **Retry cap.** A fix the automation pushed that still fails CI is not retried by the automation: the job is
+  skipped for commits that carry the `[claude-assist]` line (the prompt requires it) and for the bot actor.
+  Without this, each failed fix would trigger another paid run. The weekly job may push only to `chore/*`
+  branches.
+
 For work you watch live, `/loop` with the repo's `.claude/loop.md` babysits your own PR in a session.
 
 ## 2. Learning: turning experience into better practice

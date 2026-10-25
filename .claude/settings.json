@@ -25,7 +25,13 @@
     "ask": [
       "Bash(curl *)",
       "Bash(wget *)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(pnpm add*)",
+      "Bash(pnpm dlx*)",
+      "Bash(pnpm create*)",
+      "Bash(uv add*)",
+      "Bash(uv tool*)",
+      "Bash(uvx *)"
     ],
     "deny": [
       "Read(./.env)",
@@ -38,7 +44,12 @@
       "Bash(aws cloudformation delete-stack*)",
       "Bash(terraform apply*)",
       "Bash(terraform destroy*)",
-      "Bash(flyway clean*)"
+      "Bash(flyway clean*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(gh pr merge*)"
     ]
   },
   "hooks": {
@@ -48,7 +59,12 @@
           {
             "type": "command",
             "command": "uv",
-            "args": ["run", "--no-project", "python", "${CLAUDE_PROJECT_DIR}/.claude/hooks/session_context.py"],
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/session_context.py"
+            ],
             "timeout": 20
           }
         ]
@@ -61,7 +77,12 @@
           {
             "type": "command",
             "command": "uv",
-            "args": ["run", "--no-project", "python", "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_protected_files.py"],
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_protected_files.py"
+            ],
             "timeout": 20
           }
         ]
@@ -74,7 +95,12 @@
           {
             "type": "command",
             "command": "uv",
-            "args": ["run", "--no-project", "python", "${CLAUDE_PROJECT_DIR}/.claude/hooks/format_changed_file.py"],
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/format_changed_file.py"
+            ],
             "timeout": 60
           }
         ]

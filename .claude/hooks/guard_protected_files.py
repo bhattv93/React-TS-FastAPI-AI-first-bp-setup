@@ -7,7 +7,8 @@ the model as the reason (see docs/03-ai-first/subagents-hooks-mcp.md).
 Protected:
 
 * ``.env`` files (``.env.example`` is allowed)
-* the generated API client (``frontend/src/api/schema.d.ts``; run ``just api-gen``)
+* the generated API client (``schema.d.ts`` and ``openapi.json`` in ``frontend/src/api``;
+  run ``just api-gen``)
 * lockfiles (use ``uv add`` / ``pnpm add``)
 * Flyway migrations that are already committed (add a new migration instead)
 
@@ -21,7 +22,7 @@ import sys
 from pathlib import Path, PurePosixPath
 
 LOCKFILES = {"backend/uv.lock", "frontend/pnpm-lock.yaml"}
-GENERATED = {"frontend/src/api/schema.d.ts"}
+GENERATED = {"frontend/src/api/schema.d.ts", "frontend/src/api/openapi.json"}
 
 
 def is_tracked(root: Path, relative: str) -> bool:
