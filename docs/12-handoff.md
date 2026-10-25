@@ -149,7 +149,7 @@ IDs are work packages (`WP-`); give each a Jira-shaped key when you branch.
 | WP-A3 | `.github/workflows/codeql.yml` (Python, JavaScript/TypeScript) and `SECURITY.md` | S | CodeQL runs on PRs and weekly; results reach the Security tab; reporting path documented |
 | WP-A4 | `just doctor` | S | Reports leftover `@org/` and `AIFS` placeholders, missing tools, hooks that do not run, Docker state, port clashes; fails with actionable messages |
 | WP-A5 | Docs acceptance pass | M | Every doc reviewed against reality, `status` moved to `accepted` or fixed; the traceability matrix (R1 to R39) re-checked |
-| WP-A6 | Link and doc-rot check | S | `lychee` (or equivalent) in CI; broken links fail the PR |
+| WP-A6 | Link and doc-rot check | S | **Done (AIFS-0043):** `scripts/check_links.py` checks internal links and anchors in `just check`, pre-commit and CI; broken links fail the PR. External-URL checking is deliberately not in the gate (a third-party outage must not fail a PR); if wanted, add it as a weekly scheduled job with a pinned, verified tool |
 | WP-A7 | Complete macOS setup guide; run both guides end to end | M | `docs/10-setup/macos.md` is a real guide; a clean-machine run is recorded |
 | WP-A8 | Verify or fix the dev container | S | `.devcontainer` builds, `just setup` and `just check` pass inside it |
 | WP-A9 | Mark the repo as a GitHub template; update the adoption playbook | S | "Use this template" works and the playbook matches `just init` |

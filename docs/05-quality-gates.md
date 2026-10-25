@@ -25,7 +25,7 @@ each one runs at the earliest layer where it is fast enough.
 | API client up to date | — | — | — | ✅ | ✅ |
 | Secret scan (gitleaks) | — | Hook blocks `.env` | ✅ | — | ✅ |
 | Conventional commit / PR title with Jira key | — | — | ✅ (commit-msg) | — | ✅ |
-| markdownlint + AI-config size lint | ✅ | — | ✅ | ✅ | ✅ |
+| markdownlint + AI-config size lint + internal link check (`scripts/check_links.py`) | ✅ | — | ✅ | ✅ | ✅ |
 | Dependency health and audit (`just deps-check`: `uv lock --check`, `uv pip check`, `pip-audit`, `pnpm audit`, strict peers) | — | — | — | Manual (needs network) | ✅ every PR + weekly |
 
 `just check` is the single local command that mirrors CI. Agents run it before declaring work done.
