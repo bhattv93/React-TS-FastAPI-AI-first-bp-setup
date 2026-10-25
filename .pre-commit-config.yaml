@@ -46,6 +46,12 @@ repos:
         language: system
         files: ^frontend/
         pass_filenames: false
+      - id: ai-config
+        name: AI config budgets (CLAUDE.md, rules, skills, agents)
+        entry: just check-ai-config
+        language: system
+        files: ^(CLAUDE\.md|.*/CLAUDE\.md|\.claude/.*|\.github/copilot-instructions\.md)$
+        pass_filenames: false
       - id: ai-policy
         name: AI policy (MCP servers, plugins)
         entry: just check-ai-policy

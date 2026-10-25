@@ -87,6 +87,8 @@ Docker.
 
 ## M4: AI layer
 
+> **Status:** largely built on branch `feature/AIFS-0040/ai-layer-and-cost-governance`: `CLAUDE.md` tree, 9 path-scoped rules, 3 hooks, 3 subagents, 6 skills, AI-config lint, `/loop` prompt, dormant Claude automation, and the cost, telemetry, agent and self-improving-loop design docs. **Remaining:** the Jira MCP connection test, a Copilot parity smoke test, `generate-tests` / `new-react-component` / `bugfix-from-jira` skills, skill evals, and the `ai-enablement/` examples.
+
 **Exit:** a developer completes the W1 workflow ([playbook](03-ai-first/ai-workflows-playbook.md)) on a sample
 story in both Claude Code and Copilot.
 

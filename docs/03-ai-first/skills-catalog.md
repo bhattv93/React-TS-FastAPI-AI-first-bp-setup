@@ -19,6 +19,8 @@ Project skills live in `.claude/skills/<name>/SKILL.md`. Claude Code and Copilot
 
 ## Catalog (v1)
 
+**Built (milestone M4):** `jira-story-to-spec`, `implement-from-spec`, `new-api-endpoint`, `new-db-migration`, `new-react-page`, `pr-ready`. **Planned:** the rows below that are not in that list. Each built skill points at real code in the repo as its canonical example, so it cannot drift.
+
 | Skill | Mode | What it does | Key supporting files | Claude-only fields |
 |-------|------|--------------|----------------------|--------------------|
 | `jira-story-to-spec` | User | Pulls a Jira issue (Atlassian MCP) and writes `docs/specs/<KEY>.md` from the template. Flags missing or ambiguous ACs as open questions; it never invents them | `templates/spec.md` (link), `checklist-dor.md` | — |

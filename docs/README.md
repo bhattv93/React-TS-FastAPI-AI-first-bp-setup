@@ -14,10 +14,12 @@ The raw input they were derived from is [project-context.md](project-context.md)
 
 | # | Doc | Read it when |
 |---|-----|--------------|
+| 0 | [00-start-here.md](00-start-here.md) | First: purpose, principles, the learning path (labs) and the speed-and-quality scorecard |
 | 1 | [01-vision-and-scope.md](01-vision-and-scope.md) | You are new to the project |
 | 2 | [02-architecture/](02-architecture/overview.md) | Before writing any backend/frontend code |
 | 3 | [03-ai-first/](03-ai-first/context-strategy.md) | Before using Claude Code / Copilot on this repo, or authoring skills |
 | 3b | [03-ai-first/ai-access-governance.md](03-ai-first/ai-access-governance.md) | Before adding any AI tool, MCP server or plugin; what data may never reach an AI |
+| 3c | [cost-and-context-optimization](03-ai-first/cost-and-context-optimization.md), [usage-telemetry-and-chargeback](03-ai-first/usage-telemetry-and-chargeback.md), [agents-and-supervision](03-ai-first/agents-and-supervision.md), [self-improving-loop](03-ai-first/self-improving-loop.md) | Cost-aware operating model, per-team usage, which agent mechanism to use, and how the system learns |
 | 4 | [04-spec-driven-development/](04-spec-driven-development/jira-workflow.md) | Before picking up a Jira story |
 | 5 | [05-quality-gates.md](05-quality-gates.md) | Before opening a PR |
 | 6 | [06-delivery/](06-delivery/ci.md) | When touching CI/CD, AWS, or observability |
@@ -26,6 +28,7 @@ The raw input they were derived from is [project-context.md](project-context.md)
 | 8 | [08-roadmap.md](08-roadmap.md) | Planning sprints |
 | 9 | [09-scaffold-spec.md](09-scaffold-spec.md) | Building the repo skeleton |
 | 10 | [10-setup/](10-setup/README.md) | Setting up a developer machine |
+| 11 | [11-adoption-playbook.md](11-adoption-playbook.md) | Reusing this repo as your own project and rolling it out safely |
 | — | [adr/](adr/0000-template.md) | Understanding *why* a decision was made |
 | — | [specs/](specs/README.md) | Per-story specs generated from Jira |
 
@@ -78,5 +81,10 @@ Every requirement in [project-context.md](project-context.md) and the doc that c
 | R30 | Configuration and environment variables per environment | [07-engineering-process/config-and-secrets.md](07-engineering-process/config-and-secrets.md) |
 | R31 | Structure and management of the AI `.md` files | [03-ai-first/md-governance.md](03-ai-first/md-governance.md) |
 | R32 | Controlled access to GenAI and its tools | [03-ai-first/ai-access-governance.md](03-ai-first/ai-access-governance.md), [ADR-0009](adr/0009-controlled-genai-access.md) |
+| R35 | Repo is a tutorial and a reusable framework that speeds delivery without lowering quality | [00-start-here.md](00-start-here.md), [11-adoption-playbook.md](11-adoption-playbook.md) |
+| R36 | Lower AI cost and optimal results: context efficiency, model routing, caching, the right technique per task | [03-ai-first/cost-and-context-optimization.md](03-ai-first/cost-and-context-optimization.md), [ADR-0011](adr/0011-tiered-ai-operating-model.md) |
+| R37 | Monitor which team uses AI and what it costs | [03-ai-first/usage-telemetry-and-chargeback.md](03-ai-first/usage-telemetry-and-chargeback.md) |
+| R38 | Subagents, advisor, agent teams, goal, loop, schedule and workflows, each used where it fits, under supervision | [03-ai-first/agents-and-supervision.md](03-ai-first/agents-and-supervision.md) |
+| R39 | Self-healing and learning from previous sessions (insights, memory, automation) | [03-ai-first/self-improving-loop.md](03-ai-first/self-improving-loop.md), [ADR-0012](adr/0012-self-healing-automation-boundaries.md) |
 | R34 | Scheduled vulnerability scanning (Wiz, Dependabot, npm audit, pip-audit) and resolvable, harmonious dependencies | [07-engineering-process/vulnerability-management.md](07-engineering-process/vulnerability-management.md), [ADR-0010](adr/0010-vulnerability-and-dependency-health.md) |
 | R33 | Step-by-step developer setup (Windows first, then macOS), no machine-specific paths | [10-setup/](10-setup/README.md) |

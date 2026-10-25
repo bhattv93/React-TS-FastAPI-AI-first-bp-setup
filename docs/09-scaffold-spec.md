@@ -28,6 +28,9 @@ Every file to create in milestones M1–M6, and its purpose. Folder-internal cod
 | `docker-compose.yml` | `db` (postgres:16), `flyway` (migrate, then exit), `api` (optional) |
 | `.mcp.json` | Claude Code MCP: Atlassian (allowlisted in `.github/ai-policy.json`) |
 | `scripts/check_deps.py` | Dependency health and vulnerability checks shared by `just deps-check` and CI ([ADR-0010](adr/0010-vulnerability-and-dependency-health.md)) |
+| `scripts/check_ai_config.py` | Enforces context budgets: file sizes, scoped rules, skill metadata, pinned subagent models |
+| `.github/workflows/claude-assist.yml` | Dormant, human-merged Claude automation: `@claude`, CI-failure fixes, weekly remediation ([ADR-0012](adr/0012-self-healing-automation-boundaries.md)) |
+| `.claude/loop.md` | Default prompt for `/loop`: babysit the current PR |
 | `scripts/check_ai_policy.py` | CI/pre-commit check that MCP servers and plugins stay on the allowlist ([ADR-0009](adr/0009-controlled-genai-access.md)) |
 | `release-please-config.json`, `.release-please-manifest.json` | Release automation |
 

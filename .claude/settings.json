@@ -9,6 +9,7 @@
     "playwright@anthropic-plugin-directory": true,
     "claude-md-management@anthropic-plugin-directory": true
   },
+  "model": "sonnet",
   "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
@@ -24,7 +25,13 @@
     "ask": [
       "Bash(curl *)",
       "Bash(wget *)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(pnpm add*)",
+      "Bash(pnpm dlx*)",
+      "Bash(pnpm create*)",
+      "Bash(uv add*)",
+      "Bash(uv tool*)",
+      "Bash(uvx *)"
     ],
     "deny": [
       "Read(./.env)",
@@ -37,7 +44,67 @@
       "Bash(aws cloudformation delete-stack*)",
       "Bash(terraform apply*)",
       "Bash(terraform destroy*)",
-      "Bash(flyway clean*)"
+      "Bash(flyway clean*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(gh pr merge*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/session_context.py"
+            ],
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_protected_files.py"
+            ],
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--no-project",
+              "python",
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/format_changed_file.py"
+            ],
+            "timeout": 60
+          }
+        ]
+      }
     ]
   }
 }

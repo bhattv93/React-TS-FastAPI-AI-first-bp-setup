@@ -8,6 +8,8 @@ last-reviewed: 2026-10-24
 
 ## Subagents (`.claude/agents/*.md`)
 
+> **Built:** `code-reviewer` (Sonnet), `spec-verifier` (Haiku), `test-triage` (Haiku). The other rows are planned. Every agent pins a model; the lint enforces it. See [agents-and-supervision.md](agents-and-supervision.md).
+
 Subagents run in their own context window. Use them for specialist work whose intermediate output shouldn't
 pollute the main session. VS Code Copilot also reads this folder (Claude agent format).
 
@@ -26,7 +28,14 @@ Rules:
 
 ## Hooks (`.claude/settings.json`) are the enforcement layer
 
-Instruction files are advisory. Hooks are deterministic. Hook scripts live in `.claude/hooks/` as Python run
+> **Built:** `guard_protected_files.py` (PreToolUse), `format_changed_file.py` (PostToolUse), `session_context.py` (SessionStart), all covered by unit tests and run with `uv run --no-project python`. The other rows are planned.
+
+Instruction files are advisory. Hooks are deterministic, but narrow: `guard_protected_files.py` sees only the
+agent's edit tools (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`), and permission rules match command text, so
+`sed -i` or `sh -c` can reach the same files. Treat hooks and deny rules as guard rails, not a boundary. The
+backstops that apply to everyone are CI and git: the `gate` check, the generated-client drift check, gitleaks
+and the check that fails a pull request that modifies, renames or deletes an applied Flyway migration. Hook
+scripts live in `.claude/hooks/` as Python run
 through `uv run --no-project python …`, so they work on Windows and Unix. They receive the tool call as JSON
 on stdin, and exit code `2` blocks the call, with the reason on stderr sent back to Claude.
 

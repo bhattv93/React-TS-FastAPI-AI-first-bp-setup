@@ -27,8 +27,10 @@ With path-filtered *separate* workflows, a required check that never ran stays "
 merge. Instead, `ci.yml` uses `dorny/paths-filter` to decide which reusable workflows to call. A final job
 (`gate`, `if: always()`) fails if any called job failed or was cancelled **and** passes when jobs were
 skipped. It also waits for `changes`, so a broken change-detection job fails the gate instead of silently
-skipping the backend and frontend jobs. Only `gate` is a required status check. The workflow also runs on
-`edited` pull requests, so fixing a wrong PR title re-runs the title check without a new push.
+skipping the backend and frontend jobs. Only `gate` is a required status check. The backend job also runs when `scripts/**`, `.claude/**` or `.github/ai-policy.json` change, because the unit
+tests for those files live in the backend suite. The repo-hygiene job fails a pull request that modifies,
+renames or deletes a file in `backend/db/migrations` (an applied migration is immutable). The workflow also
+runs on `edited` pull requests, so fixing a wrong PR title re-runs the title check without a new push.
 
 ## Jobs
 

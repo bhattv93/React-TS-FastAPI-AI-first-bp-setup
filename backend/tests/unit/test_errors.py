@@ -141,3 +141,13 @@ async def test_unexpected_errors_still_carry_the_request_id(
     assert response.status_code == 500
     assert response.headers["X-Request-ID"] == "rid-9"
     assert response.json()["error"]["request_id"] == "rid-9"
+
+
+@pytest.mark.usefixtures("failing_routes")
+async def test_validation_details_do_not_echo_submitted_values(
+    client: AsyncClient,
+) -> None:
+    response = await client.post("/boom/validate", json={"count": "hunter2-secret"})
+    assert response.status_code == 422
+    assert "hunter2-secret" not in response.text
+    assert response.json()["error"]["details"][0]["loc"] == ["body", "count"]

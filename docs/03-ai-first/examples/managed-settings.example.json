@@ -1,0 +1,14 @@
+{
+  "$comment": "EXAMPLE ONLY. Deliver through managed settings (admin console, MDM or managed-settings.json), never from the repository: Claude Code ignores telemetry exporter settings in project files. Replace every placeholder. See docs/03-ai-first/usage-telemetry-and-chargeback.md",
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "https://otel-collector.your-company.example:4317",
+    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE": "cumulative",
+    "OTEL_METRIC_EXPORT_INTERVAL": "60000",
+    "OTEL_RESOURCE_ATTRIBUTES": "department=engineering,team.id=REPLACE_WITH_TEAM,cost_center=REPLACE_WITH_COST_CENTER",
+    "OTEL_METRICS_INCLUDE_REPOSITORY": "true"
+  }
+}

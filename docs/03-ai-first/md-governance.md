@@ -50,7 +50,7 @@ How every `.md` file that steers humans or AI is structured, owned, sized and ke
 - A PR template checkbox asks: "Changed a convention? Updated rule + CLAUDE.md + affected skills + docs."
 - `.github/ai-policy.json` (the MCP server and plugin allowlist) is CODEOWNERS-protected and checked by
   `scripts/check_ai_policy.py`. See [ai-access-governance.md](ai-access-governance.md).
-- CI lint (M4):
+- CI lint (built: `scripts/check_ai_config.py`, run by `just check`, pre-commit and CI):
   - markdownlint on all `.md`
   - a script that fails if root `CLAUDE.md` > 150 lines, a folder `CLAUDE.md` > 100, a rule > 60, or
     `SKILL.md` > 500
