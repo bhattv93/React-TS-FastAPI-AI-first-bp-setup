@@ -53,6 +53,9 @@ def configure_logging(level: str = "INFO", *, json_logs: bool = True) -> None:
         structlog.processors.TimeStamper(fmt="iso", utc=True),
         redact_sensitive,
     ]
+    if json_logs:
+        # JSON has no pretty exceptions: turn ``exc_info`` into a traceback string.
+        shared.append(structlog.processors.format_exc_info)
     renderer: Any = (
         structlog.processors.JSONRenderer()
         if json_logs

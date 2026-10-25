@@ -3,19 +3,20 @@
 Envelope::
 
     {"error": {"code": "...", "message": "...", "details": ..., "request_id": "..."}}
+
+Unexpected exceptions are converted to the same envelope by ``RequestIdMiddleware``.
 """
 
+from collections.abc import Mapping
 from typing import Any
 
-import structlog
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.core.middleware import current_request_id
-
-logger = structlog.get_logger(__name__)
+from app.core.context import current_request_id
 
 
 class AppError(Exception):
@@ -60,7 +61,11 @@ class DomainValidationError(AppError):
 
 
 def error_response(
-    status_code: int, code: str, message: str, details: Any = None
+    status_code: int,
+    code: str,
+    message: str,
+    details: Any = None,
+    headers: Mapping[str, str] | None = None,
 ) -> JSONResponse:
     """Build a response in the standard error envelope.
 
@@ -74,6 +79,8 @@ def error_response(
         Human-readable description.
     details : Any, optional
         Extra machine-readable context.
+    headers : Mapping[str, str], optional
+        Extra response headers, such as ``WWW-Authenticate`` or ``Retry-After``.
 
     Returns
     -------
@@ -82,6 +89,7 @@ def error_response(
     """
     return JSONResponse(
         status_code=status_code,
+        headers=headers,
         content={
             "error": {
                 "code": code,
@@ -138,8 +146,12 @@ def register_exception_handlers(app: FastAPI) -> None:
         JSONResponse
             A 422 response listing the invalid fields.
         """
+        # ``errors()`` can hold exception objects (``ctx.error``) JSON cannot encode.
         return error_response(
-            422, "request_validation_error", "Request validation failed", exc.errors()
+            422,
+            "request_validation_error",
+            "Request validation failed",
+            jsonable_encoder(exc.errors()),
         )
 
     @app.exception_handler(StarletteHTTPException)
@@ -160,23 +172,6 @@ def register_exception_handlers(app: FastAPI) -> None:
         JSONResponse
             The enveloped response.
         """
-        return error_response(exc.status_code, "http_error", str(exc.detail))
-
-    @app.exception_handler(Exception)
-    async def _unhandled(_request: Request, exc: Exception) -> JSONResponse:
-        """Handle unexpected errors without leaking internals.
-
-        Parameters
-        ----------
-        _request : Request
-            The failing request (unused).
-        exc : Exception
-            The unexpected exception.
-
-        Returns
-        -------
-        JSONResponse
-            A generic 500 response.
-        """
-        logger.error("unhandled_exception", exc_info=exc)
-        return error_response(500, "internal_error", "Internal server error")
+        return error_response(
+            exc.status_code, "http_error", str(exc.detail), headers=exc.headers
+        )
