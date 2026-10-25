@@ -60,7 +60,11 @@ dev: db-up
 # ---------------------------------------------------------------- quality gates
 
 # Everything CI runs. Run this before opening a PR.
-check: check-backend check-frontend api-check check-ai-policy check-ai-config
+check: check-backend check-frontend api-check check-ai-policy check-ai-config check-links
+
+# Fail if a Markdown file links to a file or heading that does not exist (internal links only; no network).
+check-links:
+    uv run --project backend python scripts/check_links.py
 
 # Fail if AI instruction files break their context budgets (sizes, scoped rules, pinned subagent models).
 check-ai-config:
