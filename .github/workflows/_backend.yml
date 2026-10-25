@@ -77,7 +77,7 @@ jobs:
         run: |
           docker run --rm --network host \
             -v "${{ github.workspace }}/backend/db/migrations:/flyway/sql:ro" \
-            flyway/flyway:11@sha256:782c5c207ffb5ac6336139fda4f4295bd9991ef63ad36919406d4268740069bb \
+            flyway/flyway:12@sha256:455c23d438811c27415f2c28052d0cc4494665a313b6faa41a7ece5242c24f10 \
             -url=jdbc:postgresql://localhost:5432/app -user=app -password=app \
             -locations=filesystem:/flyway/sql -validateMigrationNaming=true \
             migrate validate

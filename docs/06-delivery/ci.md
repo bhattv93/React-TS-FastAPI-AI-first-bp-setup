@@ -48,7 +48,7 @@ runs on `edited` pull requests, so fixing a wrong PR title re-runs the title che
 | | `wiz` | Optional Wiz CLI scan (skipped until `WIZ_ENABLED=true`); see [vulnerability-management.md](../07-engineering-process/vulnerability-management.md#wiz) |
 | `_repo` | `docs` | `markdownlint-cli2`, AI-config size and name lint ([md-governance](../03-ai-first/md-governance.md#change-control)) |
 | | `security` | `gitleaks`, `pip-audit`, `pnpm audit --prod` |
-| | `meta` | `actionlint`; PR title regex: conventional commit + `(AIFS-0001)` |
+| | `meta` | `actionlint`; PR title regex: conventional commit + `(AIFS-0001)` (Dependabot PRs are exempt: their titles cannot carry a Jira key) |
 
 Standards for all workflows:
 
