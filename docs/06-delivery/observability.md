@@ -14,9 +14,14 @@ last-reviewed: 2026-10-24
   `APP_ENV=local`.
 - Standard fields: `timestamp`, `level`, `event`, `logger`, `request_id`, `method`, `path`, `status`,
   `duration_ms`, `env`, `version` (git SHA).
-- **Request ID middleware** (`app/core/middleware.py`) reads `X-Request-ID` or generates a UUID, stores it in
-  a `contextvar` and echoes it on the response. The error envelope includes it, so users can quote it in bug
-  reports.
+- **Request ID middleware** (`app/core/middleware.py`) reads `X-Request-ID` (only 1-64 characters from
+  `A-Z a-z 0-9 . _ -` are accepted, anything else is replaced by a generated UUID), stores it in a
+  `contextvar`, clears it when the request ends and echoes it on the response (exposed to browsers through
+  CORS). The error envelope includes it, so users can quote it in bug reports.
+- **Unexpected exceptions** are caught by the same middleware, logged with the full traceback
+  (`unhandled_exception`, JSON field `exception`), counted in the access log as a 500 and returned as the
+  standard envelope. Doing this inside the middleware (not a framework handler) keeps the CORS and
+  request-ID headers on 500 responses.
 - **No PII or secrets in logs.** A structlog processor redacts known keys (`password`, `token`,
   `authorization`, `email`).
 - Retention: 30 days in dev and staging, 90+ in prod (set in IaC). Save CloudWatch **Logs Insights** queries

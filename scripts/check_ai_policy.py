@@ -2,9 +2,12 @@
 
 Checks, relative to the repository root:
 
-* ``.mcp.json`` and ``.vscode/mcp.json`` list only approved MCP servers.
+* ``.mcp.json``, ``.vscode/mcp.json`` and ``.claude/settings.json`` declare only approved MCP
+  servers, and each approved server still points at its pinned URL (a renamed host or a local
+  command under an approved name is a violation).
 * ``.claude/settings.json`` enables only approved plugins.
-* ``.claude/settings.json`` does not auto-approve project MCP servers or default to bypass mode.
+* ``.claude/settings.json`` does not auto-approve project MCP servers, default to bypass mode or
+  skip the dangerous-mode prompt.
 
 Usage::
 
@@ -51,17 +54,32 @@ def check(root: Path) -> list[str]:
     """
     policy = _load(root / ".github" / "ai-policy.json")
     approved_servers = set(policy.get("mcpServers", {}).get("approved", []))
+    pinned_urls: dict[str, str] = policy.get("mcpServers", {}).get("urls", {})
     approved_plugins = set(policy.get("claudePlugins", {}).get("approved", []))
     problems: list[str] = []
 
-    for relative, key in ((".mcp.json", "mcpServers"), (".vscode/mcp.json", "servers")):
-        servers = set(_load(root / relative).get(key, {}))
-        problems += [
-            f"{relative}: MCP server '{name}' is not on the allowlist in .github/ai-policy.json"
-            for name in sorted(servers - approved_servers)
-        ]
-
     settings = _load(root / ".claude" / "settings.json")
+    declared = (
+        (".mcp.json", _load(root / ".mcp.json").get("mcpServers", {})),
+        (".vscode/mcp.json", _load(root / ".vscode" / "mcp.json").get("servers", {})),
+        (".claude/settings.json", settings.get("mcpServers", {})),
+    )
+    for relative, servers in declared:
+        for name in sorted(servers):
+            if name not in approved_servers:
+                problems.append(
+                    f"{relative}: MCP server '{name}' is not on the allowlist in "
+                    ".github/ai-policy.json"
+                )
+                continue
+            pinned = pinned_urls.get(name)
+            found = servers[name].get("url")
+            if pinned is not None and found != pinned:
+                problems.append(
+                    f"{relative}: MCP server '{name}' must use {pinned} "
+                    f"(found {found or 'a local command'})"
+                )
+
     enabled = {name for name, on in settings.get("enabledPlugins", {}).items() if on}
     problems += [
         f".claude/settings.json: plugin '{name}' is not on the allowlist in .github/ai-policy.json"
@@ -77,6 +95,10 @@ def check(root: Path) -> list[str]:
     }:
         problems.append(
             ".claude/settings.json: defaultMode must not bypass permission prompts"
+        )
+    if settings.get("skipDangerousModePermissionPrompt") is True:
+        problems.append(
+            ".claude/settings.json: skipDangerousModePermissionPrompt must not be true"
         )
     return problems
 

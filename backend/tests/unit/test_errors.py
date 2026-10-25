@@ -3,7 +3,8 @@
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.errors import (
     AppError,
@@ -15,6 +16,17 @@ from app.core.errors import (
 
 class Payload(BaseModel):
     count: int
+
+
+class CheckedPayload(BaseModel):
+    count: int
+
+    @field_validator("count")
+    @classmethod
+    def must_be_positive(cls, value: int) -> int:
+        if value < 0:
+            raise ValueError("count must be positive")
+        return value
 
 
 @pytest.fixture
@@ -42,6 +54,16 @@ def failing_routes(app: FastAPI) -> FastAPI:
     @app.post("/boom/validate")
     async def validate(payload: Payload) -> Payload:
         return payload
+
+    @app.post("/boom/checked")
+    async def checked(payload: CheckedPayload) -> CheckedPayload:
+        return payload
+
+    @app.get("/boom/unauthorized")
+    async def unauthorized() -> None:
+        raise StarletteHTTPException(
+            401, "Not authenticated", headers={"WWW-Authenticate": "Bearer"}
+        )
 
     return app
 
@@ -93,3 +115,29 @@ async def test_unexpected_errors_do_not_leak_internals(client: AsyncClient) -> N
     assert response.status_code == 500
     assert response.json()["error"]["message"] == "Internal server error"
     assert "secret internals" not in response.text
+
+
+@pytest.mark.usefixtures("failing_routes")
+async def test_validator_errors_stay_a_422_not_a_500(client: AsyncClient) -> None:
+    response = await client.post("/boom/checked", json={"count": -1})
+    body = response.json()
+    assert response.status_code == 422
+    assert body["error"]["code"] == "request_validation_error"
+    assert "count must be positive" in response.text
+
+
+@pytest.mark.usefixtures("failing_routes")
+async def test_http_error_headers_are_preserved(client: AsyncClient) -> None:
+    response = await client.get("/boom/unauthorized")
+    assert response.status_code == 401
+    assert response.headers["WWW-Authenticate"] == "Bearer"
+
+
+@pytest.mark.usefixtures("failing_routes")
+async def test_unexpected_errors_still_carry_the_request_id(
+    client: AsyncClient,
+) -> None:
+    response = await client.get("/boom/unexpected", headers={"X-Request-ID": "rid-9"})
+    assert response.status_code == 500
+    assert response.headers["X-Request-ID"] == "rid-9"
+    assert response.json()["error"]["request_id"] == "rid-9"

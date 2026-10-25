@@ -1,3 +1,5 @@
+import { UserFacingError } from './errors';
+
 /** Runtime configuration loaded from `/config.json` (see docs/06-delivery/aws-frontend.md). */
 export interface AppConfig {
   /** Origin of the API. Empty string means same-origin (CloudFront or the Vite proxy). */
@@ -5,7 +7,7 @@ export interface AppConfig {
   env: string;
 }
 
-export class ConfigError extends Error {
+export class ConfigError extends UserFacingError {
   override name = 'ConfigError';
 }
 

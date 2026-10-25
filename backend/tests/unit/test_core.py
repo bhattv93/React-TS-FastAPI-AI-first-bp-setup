@@ -1,11 +1,15 @@
 """Database factory helpers, auth placeholder and model conventions."""
 
+from unittest.mock import AsyncMock, patch
+
+import pytest
 from fastapi import FastAPI
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from app.api.deps import get_current_user, get_session
 from app.core.config import Settings
 from app.core.db import create_engine, create_session_factory
+from app.main import create_app
 from app.models import AppMeta, Base
 
 
@@ -51,3 +55,14 @@ def test_models_follow_naming_convention() -> None:
     assert {"key", "value", "created_at", "updated_at"} == set(
         AppMeta.__table__.columns.keys()
     )
+
+
+async def test_engine_is_disposed_even_when_the_app_stops_with_an_error(
+    settings: Settings,
+) -> None:
+    application = create_app(settings)
+    with patch.object(AsyncEngine, "dispose", new=AsyncMock()) as dispose:
+        with pytest.raises(RuntimeError, match="shutdown"):
+            async with application.router.lifespan_context(application):
+                raise RuntimeError("shutdown")
+    dispose.assert_awaited_once()

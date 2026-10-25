@@ -39,3 +39,16 @@ def test_console_logs_are_not_json(capsys: pytest.CaptureFixture[str]) -> None:
     assert "plain message" in out
     assert not out.lstrip().startswith("{")
     configure_logging("INFO", json_logs=True)
+
+
+def test_json_logs_render_exception_tracebacks(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    configure_logging("INFO", json_logs=True)
+    try:
+        raise ValueError("kaboom")
+    except ValueError as exc:
+        structlog.get_logger("test").error("failed", exc_info=exc)
+    payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
+    assert "Traceback" in payload["exception"]
+    assert "ValueError: kaboom" in payload["exception"]

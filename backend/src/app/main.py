@@ -16,7 +16,7 @@ from app.core.config import Settings, get_settings
 from app.core.db import create_engine, create_session_factory
 from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
-from app.core.middleware import RequestIdMiddleware
+from app.core.middleware import REQUEST_ID_HEADER, RequestIdMiddleware
 
 API_PREFIX = "/api/v1"
 
@@ -54,8 +54,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         engine = create_engine(settings)
         app.state.engine = engine
         app.state.session_factory = create_session_factory(engine)
-        yield
-        await engine.dispose()
+        try:
+            yield
+        finally:
+            await engine.dispose()
 
     app = FastAPI(title="AI-First Backend", version=settings.version, lifespan=lifespan)
     app.dependency_overrides[get_settings] = lambda: settings
@@ -66,6 +68,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_origins=settings.cors_origins,
             allow_methods=["*"],
             allow_headers=["*"],
+            expose_headers=[REQUEST_ID_HEADER],
         )
     register_exception_handlers(app)
     app.include_router(api_router, prefix=API_PREFIX)
