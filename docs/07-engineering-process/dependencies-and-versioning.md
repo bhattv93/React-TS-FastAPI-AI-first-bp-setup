@@ -16,7 +16,7 @@ Tooling decision: [ADR-0003](../adr/0003-uv-and-pnpm.md).
 | Node 22 LTS | `.nvmrc` and `"engines"` in `frontend/package.json` |
 | pnpm | `"packageManager": "pnpm@<x.y.z>"` (Corepack) |
 | Postgres | `postgres:16` in compose and CI; RDS engine version in IaC |
-| Docker base images | Tag + digest in `Dockerfile` |
+| Docker images (base, compose, CI scanners) | Tag + digest in `Dockerfile`, `docker-compose.yml` and workflows |
 
 ## Declaring dependencies
 

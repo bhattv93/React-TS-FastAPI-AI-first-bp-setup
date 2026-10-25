@@ -25,8 +25,10 @@ Every PR to `main` runs the gates from [05-quality-gates.md](../05-quality-gates
 
 With path-filtered *separate* workflows, a required check that never ran stays "pending" and blocks the
 merge. Instead, `ci.yml` uses `dorny/paths-filter` to decide which reusable workflows to call. A final job
-(`gate`, `if: always()`) fails if any called job failed **and** passes when jobs were skipped. Only `gate` is
-a required status check.
+(`gate`, `if: always()`) fails if any called job failed or was cancelled **and** passes when jobs were
+skipped. It also waits for `changes`, so a broken change-detection job fails the gate instead of silently
+skipping the backend and frontend jobs. Only `gate` is a required status check. The workflow also runs on
+`edited` pull requests, so fixing a wrong PR title re-runs the title check without a new push.
 
 ## Jobs
 
@@ -51,6 +53,10 @@ Standards for all workflows:
 - `permissions: contents: read` by default; widen only where needed.
 - `concurrency: { group: ci-${{ github.ref }}, cancel-in-progress: true }`.
 - Third-party actions **pinned by commit SHA**; Dependabot keeps them updated.
+- Container images are **pinned by digest** everywhere: the `Dockerfile`, `docker-compose.yml`, the Postgres
+  and Flyway images in `_backend.yml`, and the gitleaks and actionlint images in `_repo.yml`. Dependabot
+  bumps the Dockerfile and compose digests; images referenced only inside workflow scripts are bumped by
+  hand, so review them when a scanner release matters.
 - No long-lived AWS keys. CI never deploys from PRs.
 
 ## Branch protection (repository ruleset on `main`)
