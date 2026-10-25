@@ -58,8 +58,11 @@ jobs:
           fi
       - name: actionlint
         run: docker run --rm -v "${{ github.workspace }}:/repo" -w /repo rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 -color
+      # Dependabot titles ("chore(deps): Bump x from 1 to 2") cannot carry a Jira key, so its pull
+      # requests are exempt. The check keys on the PR author, not the actor, so a person clicking
+      # "Update branch" on a Dependabot PR does not turn it red.
       - name: PR title is a conventional commit ending with the Jira key
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
