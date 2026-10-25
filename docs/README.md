@@ -29,6 +29,7 @@ The raw input they were derived from is [project-context.md](project-context.md)
 | 9 | [09-scaffold-spec.md](09-scaffold-spec.md) | Building the repo skeleton |
 | 10 | [10-setup/](10-setup/README.md) | Setting up a developer machine |
 | 11 | [11-adoption-playbook.md](11-adoption-playbook.md) | Reusing this repo as your own project and rolling it out safely |
+| 12 | [12-handoff.md](12-handoff.md) | Continuing the work: current state, decisions, unverified items and the ordered backlog |
 | — | [adr/](adr/0000-template.md) | Understanding *why* a decision was made |
 | — | [specs/](specs/README.md) | Per-story specs generated from Jira |
 
