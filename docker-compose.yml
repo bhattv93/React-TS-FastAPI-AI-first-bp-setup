@@ -24,7 +24,7 @@ services:
 
   # Applies backend/db/migrations then exits. Same image and SQL files CI and AWS use.
   flyway:
-    image: flyway/flyway:12@sha256:455c23d438811c27415f2c28052d0cc4494665a313b6faa41a7ece5242c24f10
+    image: flyway/flyway:13@sha256:9d5a0f832e80523102ab5a3ff8add9cdf8d7025de771bc5e573609af74ffbed7
     command: -connectRetries=10 migrate
     environment:
       FLYWAY_URL: jdbc:postgresql://db:5432/app
