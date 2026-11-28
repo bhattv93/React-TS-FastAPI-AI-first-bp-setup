@@ -7,7 +7,7 @@
 # ecosystem) proposes digest bumps as pull requests.
 
 # ---- builder: resolve and install locked dependencies with uv ----
-FROM python:3.13-slim@sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962 AS builder
+FROM python:3.13-slim@sha256:7249d5587b78209a006dc4a3b5340678f84ea729239193aa559962cd8c1fce50 AS builder
 COPY --from=ghcr.io/astral-sh/uv:0.13.5@sha256:32a7bb39b496babbd997b0a39a4d66c126bdaf5661b302bf6f06abda8deca6ff /uv /uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev
 
 # ---- runtime: slim, non-root. Used for ECS, local runs and the CI image gate ----
-FROM python:3.13-slim@sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962 AS runtime
+FROM python:3.13-slim@sha256:7249d5587b78209a006dc4a3b5340678f84ea729239193aa559962cd8c1fce50 AS runtime
 RUN useradd --create-home --uid 10001 app \
     # The app runs from /app/.venv (built by uv). pip is not needed at runtime, and its vendored
     # libraries (urllib3, msgpack, ...) are scanned and flagged; removing it shrinks the attack surface.
